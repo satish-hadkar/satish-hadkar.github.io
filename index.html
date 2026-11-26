@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Satish Hadkar – Portfolio</title>
+<meta name="description" content="Satish Hadkar – M.Sc. Sensor Systems Technology student at HKA Karlsruhe. Robotics, embedded systems and automation projects.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/*
+VOICE: a working engineer's portfolio, confident and factual, no hype.
+IDEA: the page behaves like the spec sheet that ships with an industrial robot cell.
+PICTURE: a drawn 3-DOF arm with joint labels and dimension lines, slowly doing a pick-and-place.
+COLOUR and TYPE: concrete grey ground, graphite ink, robot-cell orange accent; Archivo (condensed headings) + Source Sans 3.
+LAYOUT: arm bleeds off the left edge, name and actions right; projects as wide rows, video beside facts.
+*/
+:root{color-scheme:light dark;
+ --bg:light-dark(#e9e8e4,#15191c);--panel:light-dark(#f7f6f3,#1e2428);--ink:light-dark(#1b2024,#ebeae6);
+ --mute:light-dark(#5b646b,#9aa4ab);--line:light-dark(#cfcdc7,#2f373d);--steel:light-dark(#8b959c,#6d777e);
+ --or:#f06414;--or-ink:light-dark(#b8460a,#ff8a45);--or-soft:light-dark(#fbe1d2,#3a2416)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Source Sans 3",system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:Archivo,"Arial Narrow",sans-serif;font-stretch:80%;line-height:1.05;margin:0;text-wrap:balance}
+h2{font-size:clamp(32px,4.5vw,48px);font-weight:800}
+h3{font-size:24px;font-weight:700}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--or);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 max(5vw,16px)}
+.band{padding:clamp(48px,7vw,96px) 0}
+.lead{color:var(--mute);max-width:62ch;margin:12px 0 0}
+
+/* nav */
+nav{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:20px;height:64px}
+.mark{font:800 20px/1 Archivo,sans-serif;font-stretch:75%;text-decoration:none;display:flex;align-items:center;gap:8px}
+.mark i{width:14px;height:14px;background:var(--or);border-radius:3px}
+.links{display:flex;gap:22px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.links a{text-decoration:none;color:var(--mute);font-weight:600;white-space:nowrap;padding:10px 0}
+.links a:hover{color:var(--ink)}
+.lang{display:flex;border:1.5px solid var(--ink);border-radius:999px;overflow:hidden;flex:none}
+.lang button{all:unset;cursor:pointer;font:700 14px/1 Archivo,sans-serif;padding:10px 14px;min-height:20px}
+.lang button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.lang button:focus-visible{outline:3px solid var(--or);outline-offset:-3px}
+
+/* buttons */
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:0 20px;border-radius:8px;font-weight:600;text-decoration:none;border:1.5px solid var(--ink)}
+.btn.main{background:var(--or);border-color:var(--or);color:#1b1008}
+.btn svg{width:18px;height:18px;fill:currentColor}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:center;min-height:min(640px,calc(100vh - 64px));gap:clamp(16px,3vw,48px)}
+.arm{margin-left:calc(-1 * max(5vw,16px));aspect-ratio:1/0.82;width:calc(100% + max(5vw,16px))}
+.arm svg{width:100%;height:100%;display:block}
+.hero h1{font-size:clamp(44px,6vw,76px);font-weight:700;font-stretch:85%;letter-spacing:-.005em}
+.who{display:flex;gap:20px;align-items:center;margin-top:22px}
+.who img{flex:none;width:120px;height:150px;border-radius:12px;object-fit:cover;object-position:50% 15%;background:var(--panel);box-shadow:0 8px 24px -12px rgba(0,0,0,.45)}
+.who p{margin:0;font-size:19px;line-height:1.45;max-width:34ch}
+.seek{margin:20px 0 0;padding:12px 16px;background:var(--or-soft);border-radius:8px;max-width:52ch}
+.j{transform-box:view-box}
+@media (prefers-reduced-motion:no-preference){
+ .j1{animation:sh 9s ease-in-out infinite}.j2{animation:el 9s ease-in-out infinite}.j3{animation:wr 9s ease-in-out infinite}
+ .grip{animation:gr 9s ease-in-out infinite}
+}
+@keyframes sh{0%,100%{transform:rotate(0)}35%,50%{transform:rotate(-24deg)}}
+@keyframes el{0%,100%{transform:rotate(0)}35%,50%{transform:rotate(30deg)}}
+@keyframes wr{0%,100%{transform:rotate(0)}35%,50%{transform:rotate(-8deg)}}
+@keyframes gr{0%,30%,55%,100%{transform:translateX(0)}38%,50%{transform:translateX(4px)}}
+
+/* about */
+.about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:clamp(32px,5vw,72px)}
+.tl{list-style:none;margin:28px 0 0;padding:0;border-left:2px solid var(--line)}
+.tl li{position:relative;padding:0 0 26px 24px}
+.tl li::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--steel)}
+.tl li.edu::before{border-color:var(--or);background:var(--or)}
+.tl .d{font-size:14px;color:var(--mute);white-space:nowrap}
+.tl b{display:block;font-size:18px;line-height:1.3}
+.tl span{display:block;color:var(--mute);font-size:15px}
+.kind{display:flex;gap:16px;font-size:14px;color:var(--mute);margin-top:10px}
+.kind i{display:inline-block;width:10px;height:10px;border-radius:50%;border:2px solid var(--steel);margin-right:6px;vertical-align:-1px}
+.kind i.e{background:var(--or);border-color:var(--or)}
+.sk{display:grid;grid-template-columns:9.5em minmax(0,1fr);gap:10px 18px;margin-top:28px;align-items:baseline}
+.sk dt{font-weight:600;color:var(--mute);font-size:15px}
+.sk dd{margin:0;display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:14px;padding:3px 10px;border-radius:6px;background:var(--panel);border:1px solid var(--line);white-space:nowrap}
+.chip.b{background:transparent;border-style:dashed;color:var(--mute)}
+.langs{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:22px}
+.langs div{background:var(--panel);border-radius:8px;padding:12px 14px}
+.langs b{display:block;font:700 22px/1.1 Archivo,sans-serif;font-stretch:80%}
+.langs span{font-size:15px;color:var(--mute)}
+
+/* projects */
+.ph{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:20px}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.filters button{all:unset;cursor:pointer;min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border-radius:999px;border:1.5px solid var(--line);font-weight:600;font-size:15px}
+.filters button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.filters button:focus-visible{outline:3px solid var(--or);outline-offset:2px}
+.plist{margin-top:36px;display:grid;gap:22px}
+.proj{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);background:var(--panel);border-radius:14px;overflow:hidden}
+.proj[hidden]{display:none}
+.vid{position:relative;aspect-ratio:16/9;background:#20262a}
+.proj .vid{aspect-ratio:auto;min-height:320px}
+.vid iframe,.vid video{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:cover}
+.ph0{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:10px;color:#b9c1c6;text-align:center;padding:16px;
+ background:repeating-linear-gradient(0deg,transparent 0 31px,#2a3236 31px 32px),repeating-linear-gradient(90deg,transparent 0 31px,#2a3236 31px 32px),#20262a}
+.ph0 svg{width:56px;height:56px}
+.ph0 span{font-size:15px}
+.pb{padding:clamp(20px,3vw,32px)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;color:var(--mute)}
+.meta .now{color:var(--or-ink);font-weight:600}
+.pb h3{margin-top:8px}
+.pb .sub{color:var(--mute);margin:4px 0 0;font-size:15px}
+.fig{display:flex;align-items:baseline;gap:10px;margin:18px 0 6px}
+.fig b{font:800 clamp(34px,4vw,44px)/1 Archivo,sans-serif;font-stretch:75%;color:var(--or-ink);white-space:nowrap}
+.fig span{color:var(--mute);font-size:15px;line-height:1.3}
+.pb ul{margin:12px 0 0;padding-left:18px}
+.pb li{margin:4px 0}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.code{display:inline-flex;margin-top:14px;font-weight:600;color:var(--or-ink)}
+
+/* lab */
+.lab{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:18px;margin-top:32px}
+.lc{background:var(--panel);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.lc .proj .vid{aspect-ratio:16/9;min-height:0}
+.lc .pb{padding:18px 20px 22px}
+.lc h3{font-size:20px;margin:0}
+.lc p{margin:6px 0 0;color:var(--mute);font-size:15px}
+.sample{font-size:14px;color:var(--mute);margin-top:14px}
+
+/* contact */
+.contact{background:var(--ink);color:var(--bg)}
+.contact .lead{color:color-mix(in srgb,var(--bg) 70%,var(--ink))}
+.contact .btn{border-color:var(--bg)}
+.cgrid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:32px;align-items:end}
+.cl{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-size:18px}
+.cl a{text-decoration:none;border-bottom:1.5px solid var(--or)}
+.cl span{color:color-mix(in srgb,var(--bg) 65%,var(--ink));display:inline-block;width:5.5em;font-size:15px}
+footer{background:var(--ink);color:color-mix(in srgb,var(--bg) 55%,var(--ink));font-size:14px;padding:0 0 28px}
+
+@media(max-width:900px){
+ .hero{grid-template-columns:1fr;min-height:0;padding-top:28px}
+ .hero .txt{order:-1}
+ .arm{width:calc(100% + 2*max(5vw,16px));margin:0 calc(-1*max(5vw,16px));aspect-ratio:1/0.7}
+ .about,.cgrid{grid-template-columns:1fr}
+ .proj{grid-template-columns:1fr}
+ .proj .vid{aspect-ratio:16/9;min-height:0}
+}
+@media(max-width:600px){
+ .links{display:none}
+ .sk{grid-template-columns:1fr;gap:4px}
+ .sk dd{margin-bottom:10px}
+ .who img{width:96px;height:120px}
+ nav .lang{margin-left:auto}
+}
+</style>
+</head>
+<body>
+
+<nav>
+ <div class="wrap">
+  <a class="mark" href="#top"><i></i>Satish Hadkar</a>
+  <div class="links">
+   <a href="#about" data-t="nav_about">About</a>
+   <a href="#projects" data-t="nav_proj">Projects</a>
+   <a href="#lab" data-t="nav_lab">Learning lab</a>
+   <a href="#contact" data-t="nav_contact">Contact</a>
+  </div>
+  <div class="lang" role="group" aria-label="Language">
+   <button type="button" data-lang="en" aria-pressed="true">EN</button>
+   <button type="button" data-lang="de" aria-pressed="false">DE</button>
+  </div>
+ </div>
+</nav>
+
+<header id="top" class="wrap hero">
+ <div class="arm" aria-hidden="true">
+  <svg viewBox="0 0 600 490">
+   <defs>
+    <linearGradient id="lk" x1="0" x2="1"><stop offset="0" stop-color="#ff7a2e"/><stop offset=".55" stop-color="#f06414"/><stop offset="1" stop-color="#c94f0c"/></linearGradient>
+    <linearGradient id="st" x1="0" x2="1"><stop offset="0" stop-color="#9aa4ab"/><stop offset=".5" stop-color="#6f7a81"/><stop offset="1" stop-color="#4c565c"/></linearGradient>
+   </defs>
+   <!-- floor and grid -->
+   <g stroke="var(--line)" stroke-width="1">
+    <path d="M0 430H600"/><path d="M0 470H600" stroke-dasharray="2 6"/>
+   </g>
+   <!-- dimension lines -->
+   <g stroke="var(--steel)" stroke-width="1" fill="none">
+    <path d="M60 445V465M330 445V465M60 456H330"/>
+    <path d="M60 456l8-4v8zM330 456l-8-4v8z" fill="var(--steel)" stroke="none"/>
+   </g>
+   <text x="195" y="484" text-anchor="middle" font-size="13" fill="var(--mute)" font-family="Source Sans 3,sans-serif">reach 270 mm</text>
+   <!-- target pads -->
+   <rect x="360" y="414" width="70" height="16" rx="3" fill="var(--panel)" stroke="var(--line)"/>
+   <rect x="470" y="414" width="70" height="16" rx="3" fill="var(--panel)" stroke="var(--line)"/>
+   <rect x="379" y="384" width="32" height="30" rx="3" fill="#2f7fb0"/><rect x="379" y="384" width="32" height="6" rx="2" fill="#5aa6d4"/>
+   <!-- base -->
+   <ellipse cx="160" cy="430" rx="86" ry="10" fill="#000" opacity=".12"/>
+   <path d="M95 430h130l-14-46h-102z" fill="url(#st)"/>
+   <rect x="118" y="366" width="84" height="22" rx="6" fill="#3d464c"/>
+   <!-- shoulder -->
+   <g class="j j1" style="transform-origin:160px 360px">
+    <rect x="138" y="196" width="44" height="172" rx="22" fill="url(#lk)" transform="rotate(14 160 360)"/>
+    <circle cx="160" cy="360" r="28" fill="#3d464c"/><circle cx="160" cy="360" r="11" fill="#9aa4ab"/>
+    <!-- elbow -->
+    <g class="j j2" style="transform-origin:200px 196px">
+     <rect x="196" y="176" width="190" height="40" rx="20" fill="url(#lk)" transform="rotate(24 200 196)"/>
+     <circle cx="200" cy="196" r="24" fill="#3d464c"/><circle cx="200" cy="196" r="9" fill="#9aa4ab"/>
+     <!-- wrist -->
+     <g class="j j3" style="transform-origin:372px 274px">
+      <rect x="362" y="270" width="20" height="58" rx="6" fill="#4c565c"/>
+      <circle cx="372" cy="274" r="18" fill="#3d464c"/><circle cx="372" cy="274" r="7" fill="#9aa4ab"/>
+      <rect x="346" y="326" width="52" height="12" rx="3" fill="#3d464c"/>
+      <g class="grip"><rect x="348" y="336" width="8" height="34" rx="2" fill="#6f7a81"/></g>
+      <rect x="388" y="336" width="8" height="34" rx="2" fill="#6f7a81"/>
+     </g>
+    </g>
+   </g>
+   <!-- joint labels -->
+   <g font-family="Archivo,sans-serif" font-weight="700" font-size="15" fill="var(--ink)">
+    <path d="M132 352L70 318" stroke="var(--steel)"/><text x="30" y="314">J1</text>
+    <path d="M186 180L150 130" stroke="var(--steel)"/><text x="126" y="124">J2</text>
+    <path d="M392 262L450 226" stroke="var(--steel)"/><text x="456" y="224">J3</text>
+   </g>
+  </svg>
+ </div>
+ <div class="txt">
+  <h1>Satish Hadkar</h1>
+  <div class="who">
+   <img src="photo.jpg" alt="Portrait of Satish Hadkar" width="120" height="150">
+   <p data-t="hero_role">M.Sc. Sensor Systems Technology student at Hochschule Karlsruhe, building robots, PLC controls and embedded systems.</p>
+  </div>
+  <p class="seek" data-t="hero_seek">Looking for working student and internship roles in robotics, embedded systems and automation in Germany.</p>
+  <div class="btns">
+   <a class="btn main" id="cvBtn" href="CV_Satish_Hadkar_EN.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 3v11l4-4 1.4 1.4L12 17.8l-5.4-5.4L8 11l4 4V3zM5 19h14v2H5z"/></svg><span data-t="btn_cv">Download CV</span></a>
+   <a class="btn" href="#projects" data-t="btn_proj">See projects</a>
+   <a class="btn" href="https://www.linkedin.com/in/satish-hadkar" target="_blank" rel="noopener">LinkedIn</a>
+   <a class="btn" href="https://github.com/satish-hadkar" target="_blank" rel="noopener">GitHub</a>
+  </div>
+ </div>
+</header>
+
+<section id="about" class="band">
+ <div class="wrap about">
+  <div>
+   <h2 data-t="about_h">Background</h2>
+   <p class="lead" data-t="about_p">Electrical and electronics engineer, now in a master's in sensor systems. Hands-on with ROS 2, inverse kinematics and sensor integration in Python and C++, PLC programming and electrical fault diagnosis from industry.</p>
+   <ol class="tl" id="tl"></ol>
+   <div class="kind"><span><i class="e"></i><span data-t="k_edu">Studies</span></span><span><i></i><span data-t="k_work">Work</span></span></div>
+  </div>
+  <div>
+   <h2 data-t="skills_h">Skills</h2>
+   <dl class="sk" id="sk"></dl>
+   <h3 style="margin-top:36px" data-t="lang_h">Languages</h3>
+   <div class="langs" id="langs"></div>
+  </div>
+ </div>
+</section>
+
+<section id="projects" class="band" style="padding-top:0">
+ <div class="wrap">
+  <div class="ph">
+   <div>
+    <h2 data-t="proj_h">Projects</h2>
+    <p class="lead" data-t="proj_p">Robots, PLC controls and embedded builds, each with what it achieved.</p>
+   </div>
+   <div class="filters" id="filters"></div>
+  </div>
+  <div class="plist" id="plist"></div>
+ </div>
+</section>
+
+<section id="lab" class="band" style="padding-top:0">
+ <div class="wrap">
+  <h2 data-t="lab_h">Learning lab</h2>
+  <p class="lead" data-t="lab_p">Smaller simulations and practice builds that are not in my CV.</p>
+  <div class="lab" id="labGrid"></div>
+  <p class="sample" id="labNote" data-t="lab_note">These cards are placeholders. Each one gets a title, a short description and a video.</p>
+ </div>
+</section>
+
+<section id="contact" class="band contact">
+ <div class="wrap cgrid">
+  <div>
+   <h2 data-t="c_h">Let's talk</h2>
+   <p class="lead" data-t="c_p">Based in Karlsruhe and open to relocating within Germany. The quickest way to reach me is email.</p>
+   <div class="btns"><a class="btn main" id="cvBtn2" href="CV_Satish_Hadkar_EN.pdf" target="_blank" rel="noopener"><span data-t="btn_cv">Download CV</span></a></div>
+  </div>
+  <ul class="cl">
+   <li><span data-t="c_mail">Email</span> <a href="mailto:hsatish2001@gmail.com">hsatish2001@gmail.com</a></li>
+   <li><span data-t="c_phone">Phone</span> <a href="tel:+4915563728994">+49 15563728994</a></li>
+   <li><span>LinkedIn</span> <a href="https://www.linkedin.com/in/satish-hadkar" target="_blank" rel="noopener">satish-hadkar</a></li>
+   <li><span>GitHub</span> <a href="https://github.com/satish-hadkar" target="_blank" rel="noopener">satish-hadkar</a></li>
+  </ul>
+ </div>
+</section>
+<footer><div class="wrap">© 2026 Satish Hadkar</div></footer>
+
+<script>
+{
+/* ===== GOOGLE SHEET CONNECTION =====
+   Paste your Google Sheet ID between the quotes.
+   It is the long part of the sheet link: docs.google.com/spreadsheets/d/  THIS_PART  /edit
+   The sheet must be shared as "Anyone with the link: Viewer".
+   Leave it empty to use the content written in this file. */
+const SHEET_ID="1nR0q8CJzXjLIA4BBuQsR-5kP4LqRocA5a-TZD1oKbGw";
+const T={
+ en:{nav_about:"About",nav_proj:"Projects",nav_lab:"Learning lab",nav_contact:"Contact",
+  hero_role:"M.Sc. Sensor Systems Technology student at Hochschule Karlsruhe, building robots, PLC controls and embedded systems.",
+  hero_seek:"Looking for working student and internship roles in robotics, embedded systems and automation in Germany.",
+  btn_cv:"Download CV",btn_proj:"See projects",
+  about_h:"Background",about_p:"Electrical and electronics engineer, now in a master's in sensor systems. Hands-on with ROS 2, inverse kinematics and sensor integration in Python and C++, PLC programming and electrical fault diagnosis from industry.",
+  k_edu:"Studies",k_work:"Work",skills_h:"Skills",lang_h:"Languages",basic:"Basic knowledge",
+  proj_h:"Projects",proj_p:"Robots, PLC controls and embedded builds, each with what it achieved.",
+  f_all:"All",f_rob:"Robotics",f_auto:"Automation",f_emb:"Embedded",
+  now:"ongoing",novid:"Video coming soon",code:"View code on GitHub",
+  lab_h:"Learning lab",lab_p:"Smaller simulations and practice builds that are not in my CV.",
+  lab_note:"These cards are placeholders. Each one gets a title, a short description and a video.",
+  c_h:"Let's talk",c_p:"Based in Karlsruhe and open to relocating within Germany. The quickest way to reach me is email.",
+  c_mail:"Email",c_phone:"Phone",cv:"CV_Satish_Hadkar_EN.pdf",title:"Satish Hadkar – Portfolio"},
+ de:{nav_about:"Über mich",nav_proj:"Projekte",nav_lab:"Lernlabor",nav_contact:"Kontakt",
+  hero_role:"Masterstudent Sensor Systems Technology an der Hochschule Karlsruhe. Ich baue Roboter, SPS-Steuerungen und Embedded-Systeme.",
+  hero_seek:"Auf der Suche nach Werkstudenten- und Praktikumsstellen in Robotik, Embedded Systems und Automatisierung.",
+  btn_cv:"Lebenslauf herunterladen",btn_proj:"Projekte ansehen",
+  about_h:"Werdegang",about_p:"Ingenieur für Elektrotechnik und Elektronik, jetzt im Master Sensorsysteme. Praxis in ROS 2, inverser Kinematik und Sensorintegration mit Python und C++, SPS-Programmierung sowie elektrischer Fehlerdiagnose aus der Industrie.",
+  k_edu:"Studium",k_work:"Beruf",skills_h:"Kenntnisse",lang_h:"Sprachen",basic:"Grundkenntnisse",
+  proj_h:"Projekte",proj_p:"Roboter, SPS-Steuerungen und Embedded-Projekte, jeweils mit dem erreichten Ergebnis.",
+  f_all:"Alle",f_rob:"Robotik",f_auto:"Automatisierung",f_emb:"Embedded",
+  now:"laufend",novid:"Video folgt",code:"Code auf GitHub ansehen",
+  lab_h:"Lernlabor",lab_p:"Kleinere Simulationen und Übungsprojekte, die nicht im Lebenslauf stehen.",
+  lab_note:"Diese Karten sind Platzhalter. Jede bekommt einen Titel, eine kurze Beschreibung und ein Video.",
+  c_h:"Kontakt",c_p:"Wohnhaft in Karlsruhe und offen für einen Umzug innerhalb Deutschlands. Am schnellsten erreichen Sie mich per E-Mail.",
+  c_mail:"E-Mail",c_phone:"Telefon",cv:"Lebenslauf_Satish_Hadkar_DE.pdf",title:"Satish Hadkar – Portfolio"}
+};
+
+/* Timeline: studies and work, newest first */
+let TL=[
+ {k:"edu",d:"03.2025 –",t:{en:"Sensor Systems Technology (EIT), M.Sc.",de:"Sensor Systems Technology (EIT), M.Sc."},s:{en:"Hochschule Karlsruhe (HKA)",de:"Hochschule Karlsruhe (HKA)"}},
+ {k:"work",d:"03.2026 – 09.2026",t:{en:"Production Assistant (part-time)",de:"Produktionsassistent (Teilzeit)"},s:{en:"Badische Neueste Nachrichten Badendruck GmbH, Karlsruhe. Operated and troubleshot PLC-controlled packaging machines.",de:"Badische Neueste Nachrichten Badendruck GmbH, Karlsruhe. Bedienung und Störungsbehebung SPS-gesteuerter Verpackungsmaschinen."}},
+ {k:"work",d:"09.2023 – 08.2024",t:{en:"Service Engineer",de:"Serviceingenieur"},s:{en:"Exide Care – Ashok Power System, Mudhol, India. Diagnosed and fixed battery and UPS faults.",de:"Exide Care – Ashok Power System, Mudhol, Indien. Fehlerdiagnose an Batterien und USV-Anlagen."}},
+ {k:"edu",d:"08.2019 – 06.2023",t:{en:"Bachelor of Engineering Electrical and Electronics Engineering",de:"Bachelor of Engineering Elektrotechnik und Elektronik"},s:{en:"SDM Institute of Technology (VTU), India. Final grade 2.3",de:"SDM Institute of Technology (VTU), Indien. Abschlussnote 2,3"}},
+ {k:"work",d:"08.2022 – 09.2022",t:{en:"Student Intern",de:"Praktikant"},s:{en:"JK Cement Works, Muddapur, India. PLC/SCADA plant automation.",de:"JK Cement Works, Muddapur, Indien. SPS-/SCADA-Anlagenautomatisierung."}}
+];
+
+let SK=[
+ {l:{en:"Programming",de:"Programmierung"},v:["Python","C++","OOP","MATLAB"]},
+ {l:{en:"Robotics",de:"Robotik"},v:["ROS 2","ros2_control","URDF","RViz2","Gazebo","Webots",{en:"Inverse kinematics",de:"Inverse Kinematik"},"LiDAR"]},
+ {l:{en:"Automation",de:"Automatisierung"},v:[{en:"PLC (CODESYS)",de:"SPS (CODESYS)"},"HMI","Siemens TIA Portal"]},
+ {l:{en:"Embedded",de:"Embedded"},v:["Arduino","ESP32","Raspberry Pi",{en:"Sensor integration",de:"Sensorintegration"},"CAN / I2C / UART"]},
+ {l:{en:"EDA / Simulation",de:"EDA / Simulation"},v:["Proteus","LTspice","ProfiLab"]},
+ {l:{en:"Tools",de:"Software"},v:["Linux","Git / GitHub","Microsoft Office"]},
+ {basic:1,l:{en:"Basic knowledge",de:"Grundkenntnisse"},v:["SCADA","PyTorch","YOLOv8",{en:"Object detection",de:"Objekterkennung"},{en:"Camera calibration",de:"Kamerakalibrierung"},"KiCad","EasyEDA","SolidWorks","Fusion 360"]}
+];
+
+let LANGS=[{n:{en:"English",de:"Englisch"},v:"C1"},{n:{en:"German",de:"Deutsch"},v:{en:"B1, course ongoing",de:"B1, Kurs laufend"}},{n:{en:"Kannada",de:"Kannada"},v:{en:"Mother tongue",de:"Muttersprache"}},{n:{en:"Hindi",de:"Hindi"},v:{en:"Fluent",de:"Fließend"}}];
+
+/* PROJECTS
+   To add a video: put a YouTube video id in yt (the part after watch?v=),
+   or a file path such as "videos/arm.mp4" in video. Add a repo link in gh. */
+let P=[
+ {cat:["rob"],d:"09.2026 –",now:1,yt:"",video:"",gh:"",
+  t:{en:"ROS 2 Servo Pick-and-Place Arm",de:"ROS 2 Servo-Pick-and-Place-Arm"},
+  s:{en:"Personal project, continuing as a Master's project",de:"Privates Projekt, Fortführung als Masterprojekt"},
+  m:{v:"20 Hz",l:{en:"27-step pick-and-place of 3 objects",de:"Pick-and-Place mit 27 Schritten, 3 Objekte"}},
+  b:{en:["Built a 3-DOF servo arm with gripper, modelled in URDF and simulated in RViz2.","Implemented inverse kinematics in Python for the full pick-and-place sequence.","Now extending it to Gazebo with ros2_control, contact physics and a PyTorch object detector."],
+     de:["3-DOF-Servoarm mit Greifer in URDF modelliert und in RViz2 simuliert.","Inverse Kinematik in Python für den gesamten Pick-and-Place-Ablauf umgesetzt.","Erweiterung um Gazebo mit ros2_control, Kontaktphysik und PyTorch-Objekterkennung läuft."]},
+  tags:["ROS 2","Python","URDF","RViz2","Gazebo"]},
+ {cat:["rob"],d:"04.2026 –",now:1,yt:"",video:"",gh:"",
+  t:{en:"Autonomous Search-and-Rescue Robot",de:"Autonomer Such- und Rettungsroboter"},
+  s:{en:"Personal project, ROS 2 Jazzy",de:"Privates Projekt, ROS 2 Jazzy"},
+  m:{v:"98.2 %",vde:"98,2 %",l:{en:"map coverage in 6.5 min",de:"Kartenabdeckung in 6,5 min"}},
+  b:{en:["Built a ROS 2 robot with YOLOv8 human detection, LiDAR mapping and a 10 Hz state machine.","Explores the map with a nearest-unvisited-cell planner."],
+     de:["ROS-2-Roboter mit YOLOv8-Personenerkennung, LiDAR-Kartierung und 10-Hz-Zustandsautomat.","Erkundung der Karte mit einem Nearest-Unvisited-Cell-Planer."]},
+  tags:["ROS 2 Jazzy","YOLOv8","LiDAR","Python"]},
+ {cat:["auto"],d:"10.2026 – 11.2026",yt:"",video:"",gh:"",
+  t:{en:"PLC Machine Control Projects",de:"SPS-Projekte zur Maschinensteuerung"},
+  s:{en:"Personal learning projects",de:"Private Lernprojekte"},
+  m:{v:"6",l:{en:"ladder-logic controls programmed",de:"KOP-Steuerungen programmiert"}},
+  b:{en:["Conveyor with E-stop, HMI packing station and more, in ladder logic.","Built a 4–20 mA tank station with hysteresis pump control.","Rebuilding all of them in Siemens TIA Portal."],
+     de:["Förderband mit Not-Halt, HMI-Verpackungsstation und mehr, in Kontaktplan (KOP).","4–20-mA-Tankstation mit Hysterese-Pumpensteuerung aufgebaut.","Neuumsetzung aller Projekte in Siemens TIA Portal läuft."]},
+  tags:["CODESYS","Ladder logic","HMI","TIA Portal"]},
+ {cat:["rob","emb"],d:"01.2023 – 03.2023",yt:"",video:"",gh:"",
+  t:{en:"Bluetooth-Controlled Pick-and-Place Robotic Arm",de:"Bluetooth-gesteuerter Pick-and-Place-Roboterarm"},
+  s:{en:"Bachelor's personal project",de:"Privates Projekt im Bachelorstudium"},
+  m:{v:"ESP32",l:{en:"servo and stepper motors over Bluetooth",de:"Servo- und Schrittmotoren per Bluetooth"}},
+  b:{en:["Designed and built the arm, handling calibration and position control.","Presented the design (DOF, motion control) in a department seminar at a professor's invitation."],
+     de:["Arm entworfen und gebaut, einschließlich Kalibrierung und Positionsregelung.","Auf Einladung eines Professors in einem Seminar des Fachbereichs vorgestellt."]},
+  tags:["ESP32","Servo","Stepper","Bluetooth"]},
+ {cat:["emb"],d:"09.2022 – 03.2023",yt:"",video:"",gh:"",
+  t:{en:"Wireless Power-Theft Detection System",de:"Drahtloses System zur Erkennung von Stromdiebstahl"},
+  s:{en:"Bachelor's project, team of 3",de:"Bachelorprojekt, Team aus 3 Personen"},
+  m:{v:"1.2 s",vde:"1,2 s",l:{en:"from a 50 W tap to an SMS alert",de:"von einem 50-W-Abgriff bis zum SMS-Alarm"}},
+  b:{en:["Built C++ Arduino master/slave nodes with ACS712, 433 MHz RF and SIM800 GSM.","Cut current error to under 35 mA (0.5–5 A) through calibration and moving-average filtering.","Simulated in Proteus."],
+     de:["Arduino-Master/Slave-Knoten in C++ mit ACS712, 433-MHz-Funk und SIM800-GSM.","Messfehler durch Kalibrierung und gleitenden Mittelwert auf unter 35 mA (0,5–5 A) gesenkt.","Simulation in Proteus."]},
+  tags:["Arduino","C++","ACS712","433 MHz RF","GSM"]},
+ {cat:["rob","emb"],d:"03.2022 – 07.2022",yt:"",video:"",gh:"",
+  t:{en:"Four-Wheeled Obstacle-Avoiding Robot",de:"Vierrädriger Roboter mit Hindernisvermeidung"},
+  s:{en:"Bachelor's project, team of 4",de:"Bachelorprojekt, Team aus 4 Personen"},
+  m:{v:"±3.5°",vde:"±3,5°",l:{en:"turn error per 90°, down from ±15°",de:"Drehfehler pro 90°, vorher ±15°"}},
+  b:{en:["Built a C++ Arduino robot with HC-SR04 ultrasonic sensing, DC motors and an L293D driver.","Raised distance accuracy to 96.5 % (5–150 cm) by filtering stray reflections.","Compensated turn timing for battery voltage."],
+     de:["Arduino-Roboter in C++ mit HC-SR04-Ultraschallsensor, DC-Motoren und L293D-Treiber.","Abstandsgenauigkeit durch Filterung auf 96,5 % (5–150 cm) erhöht.","Drehzeit abhängig von der Batteriespannung kompensiert."]},
+  tags:["Arduino","C++","HC-SR04","L293D"]}
+];
+
+/* LEARNING LAB: replace these placeholders with your own simulations */
+let LAB=[
+ {sample:1,yt:"",video:"",t:{en:"Simulation title",de:"Titel der Simulation"},p:{en:"One or two lines on what you simulated and what you learned.",de:"Ein bis zwei Sätze dazu, was simuliert wurde und was Sie gelernt haben."},tags:["Gazebo"]},
+ {sample:1,yt:"",video:"",t:{en:"Simulation title",de:"Titel der Simulation"},p:{en:"One or two lines on what you simulated and what you learned.",de:"Ein bis zwei Sätze dazu, was simuliert wurde und was Sie gelernt haben."},tags:["Webots"]},
+ {sample:1,yt:"",video:"",t:{en:"Simulation title",de:"Titel der Simulation"},p:{en:"One or two lines on what you simulated and what you learned.",de:"Ein bis zwei Sätze dazu, was simuliert wurde und was Sie gelernt haben."},tags:["LTspice"]}
+];
+
+const FILTERS=[["all","f_all"],["rob","f_rob"],["auto","f_auto"],["emb","f_emb"]];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const L=(v,lang)=>typeof v==="string"?v:(v[lang]??v.en);
+let lang="en",filter="all";
+
+const play='<svg viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="27" fill="none" stroke="currentColor" stroke-width="2"/><path d="M23 18l16 10-16 10z" fill="currentColor"/></svg>';
+function media(x){
+ if(x.yt) return `<div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/${esc(x.yt)}" title="${esc(L(x.t,lang))}" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`;
+ if(x.video) return `<div class="vid"><video src="${esc(x.video)}" controls preload="metadata" playsinline></video></div>`;
+ return `<div class="vid"><div class="ph0">${play}<span>${esc(T[lang].novid)}</span></div></div>`;
+}
+
+function render(){
+ const t=T[lang];
+ document.documentElement.lang=lang;document.title=t.title;
+ document.querySelectorAll("[data-t]").forEach(e=>{const k=e.dataset.t;if(t[k])e.textContent=t[k]});
+ document.querySelectorAll("[data-lang]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
+ ["cvBtn","cvBtn2"].forEach(id=>document.getElementById(id).href=t.cv);
+
+ document.getElementById("tl").innerHTML=TL.map(x=>`<li class="${x.k}"><span class="d">${esc(x.d.endsWith("–")?x.d+" "+(lang==="de"?"heute":"present"):x.d)}</span><b>${esc(L(x.t,lang))}</b><span>${esc(L(x.s,lang))}</span></li>`).join("");
+ document.getElementById("sk").innerHTML=SK.map(g=>`<dt>${esc(L(g.l,lang))}</dt><dd>${g.v.map(v=>`<span class="chip${g.basic?" b":""}">${esc(L(v,lang))}</span>`).join("")}</dd>`).join("");
+ document.getElementById("langs").innerHTML=LANGS.map(x=>`<div><b>${esc(L(x.n,lang))}</b><span>${esc(L(x.v,lang))}</span></div>`).join("");
+
+ document.getElementById("filters").innerHTML=FILTERS.map(([k,l])=>`<button type="button" data-f="${k}" aria-pressed="${k===filter}">${esc(t[l])}</button>`).join("");
+ document.getElementById("plist").innerHTML=P.map(p=>{
+  const date=p.now?`${p.d} ${lang==="de"?"heute":"present"}`:p.d;
+  const val=lang==="de"&&p.m.vde?p.m.vde:p.m.v;
+  const show=filter==="all"||p.cat.includes(filter);
+  return `<article class="proj"${show?"":" hidden"}>${media(p)}<div class="pb">
+   <div class="meta"><span>${esc(date)}</span>${p.now?`<span class="now">${esc(t.now)}</span>`:""}</div>
+   <h3>${esc(L(p.t,lang))}</h3><p class="sub">${esc(L(p.s,lang))}</p>
+   <div class="fig"><b>${esc(val)}</b><span>${esc(L(p.m.l,lang))}</span></div>
+   <ul>${p.b[lang].map(li=>`<li>${esc(li)}</li>`).join("")}</ul>
+   <div class="tags">${p.tags.map(g=>`<span class="chip">${esc(g)}</span>`).join("")}</div>
+   ${p.gh?`<a class="code" href="${esc(p.gh)}" target="_blank" rel="noopener">${esc(t.code)}</a>`:""}
+  </div></article>`}).join("");
+
+ document.getElementById("labGrid").innerHTML=LAB.map(x=>`<article class="lc">${media(x)}<div class="pb"><h3>${esc(L(x.t,lang))}</h3><p>${esc(L(x.p,lang))}</p><div class="tags">${x.tags.map(g=>`<span class="chip">${esc(g)}</span>`).join("")}</div></div></article>`).join("");
+ document.getElementById("labNote").hidden=!LAB.some(x=>x.sample);
+ document.getElementById("lab").hidden=!LAB.length;
+ document.querySelector('.links a[href="#lab"]').hidden=!LAB.length;
+}
+
+document.querySelector(".lang").addEventListener("click",e=>{
+ const b=e.target.closest("[data-lang]");if(!b)return;
+ lang=b.dataset.lang;try{localStorage.setItem("lang",lang)}catch(_){ }render();
+});
+document.getElementById("filters").addEventListener("click",e=>{
+ const b=e.target.closest("[data-f]");if(!b)return;filter=b.dataset.f;render();
+});
+
+/* ---- read the sheet ---- */
+function csv(text){
+ const rows=[];let row=[],f="",q=false;
+ for(let i=0;i<text.length;i++){const c=text[i];
+  if(q){if(c==='"'){if(text[i+1]==='"'){f+='"';i++}else q=false}else f+=c}
+  else if(c==='"')q=true;else if(c===","){row.push(f);f=""}
+  else if(c==="\n"){row.push(f);rows.push(row);row=[];f=""}else if(c!=="\r")f+=c}
+ if(f!==""||row.length){row.push(f);rows.push(row)}
+ const h=(rows.shift()||[]).map(x=>x.trim().toLowerCase());
+ return rows.map(r=>Object.fromEntries(h.map((k,i)=>[k,(r[i]||"").trim()]))).filter(o=>Object.values(o).some(v=>v));
+}
+async function tab(name){
+ const r=await fetch(`https://docs.google.com/spreadsheets/d/${encodeURIComponent(SHEET_ID)}/gviz/tq?tqx=out:csv&headers=1&sheet=${encodeURIComponent(name)}`);
+ if(!r.ok)throw new Error(name);return csv(await r.text());
+}
+const on=o=>(o.show||"yes").toLowerCase()!=="no";
+const list=v=>(v||"").split(",").map(x=>x.trim()).filter(Boolean);
+const lines=v=>(v||"").split(/\n/).map(x=>x.replace(/^[•\-\s]+/,"").trim()).filter(Boolean);
+function md(v){ /* accept 09.2026, 9.2026, 01.09.2026 or 2026-09-01 */
+ v=(v||"").trim();let m;
+ if(m=v.match(/^(\d{1,2})[.\/](\d{4})$/))return m[1].padStart(2,"0")+"."+m[2];
+ if(m=v.match(/^\d{1,2}[.\/](\d{1,2})[.\/](\d{4})$/))return m[1].padStart(2,"0")+"."+m[2];
+ if(m=v.match(/^(\d{4})-(\d{1,2})/))return m[2].padStart(2,"0")+"."+m[1];
+ return v;
+}
+const ytid=v=>{const m=(v||"").match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);return m?m[1]:(/^[\w-]{11}$/.test(v||"")?v:"")};
+const CAT={robotics:"rob",automation:"auto",embedded:"emb",robotik:"rob",automatisierung:"auto"};
+async function loadSheet(){
+ const [pr,lb,tl,sk,lg]=await Promise.all(["Projects","Lab","Timeline","Skills","Languages"].map(n=>tab(n).catch(()=>null)));
+ if(pr)P=pr.filter(on).map(o=>{const st=md(o.start),en=md(o.end);return{
+  cat:list(o.category.toLowerCase()).map(c=>CAT[c]||c),d:en?`${st} – ${en}`:`${st} –`,now:!en,
+  yt:ytid(o.youtube_link),video:o.video_file,gh:o.github_link,
+  t:{en:o.title_en,de:o.title_de||o.title_en},s:{en:o.subtitle_en,de:o.subtitle_de||o.subtitle_en},
+  m:{v:o.result_value_en,vde:o.result_value_de||o.result_value_en,l:{en:o.result_label_en,de:o.result_label_de||o.result_label_en}},
+  b:{en:lines(o.bullets_en),de:lines(o.bullets_de||o.bullets_en)},tags:list(o.tags)}});
+ if(lb)LAB=lb.filter(on).map(o=>({yt:ytid(o.youtube_link),video:o.video_file,t:{en:o.title_en,de:o.title_de||o.title_en},p:{en:o.description_en,de:o.description_de||o.description_en},tags:list(o.tags)}));
+ if(tl)TL=tl.filter(on).map(o=>{const st=md(o.start),en=md(o.end);return{k:(o.type||"").toLowerCase().startsWith("work")?"work":"edu",d:en?`${st} – ${en}`:`${st} –`,t:{en:o.title_en,de:o.title_de||o.title_en},s:{en:o.details_en,de:o.details_de||o.details_en}}});
+ if(sk)SK=sk.filter(on).map(o=>{const a=list(o.items_en),b=list(o.items_de);return{basic:(o.basic||"").toLowerCase()==="yes",l:{en:o.group_en,de:o.group_de||o.group_en},v:a.map((x,i)=>({en:x,de:b[i]||x}))}});
+ if(lg)LANGS=lg.filter(on).map(o=>({n:{en:o.language_en,de:o.language_de||o.language_en},v:{en:o.level_en,de:o.level_de||o.level_en}}));
+ render();
+}
+
+try{lang=localStorage.getItem("lang")||""}catch(_){lang=""}
+if(lang!=="en"&&lang!=="de")lang=(navigator.language||"en").toLowerCase().startsWith("de")?"de":"en";
+render();
+if(SHEET_ID)loadSheet().catch(()=>{});
+}
+</script>
+</body>
+</html>
