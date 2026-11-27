@@ -105,7 +105,16 @@ nav .wrap{display:flex;align-items:center;gap:20px;height:64px}
 .vid{position:relative;aspect-ratio:16/9;background:#20262a}
 .proj .vid{aspect-ratio:auto;min-height:320px}
 .vid iframe,.vid video{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:cover}
-.vid.pic{background:#fff}.vid.pic a{position:absolute;inset:0;cursor:zoom-in}.vid.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:10px}
+.vid .pic{position:absolute;inset:0;cursor:zoom-in}.vid .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:10px}
+.vid.white,.sl.white{background:#fff}
+.gal .track{position:absolute;inset:0;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;outline:none}
+.gal .track::-webkit-scrollbar{display:none}
+.gal .sl{position:relative;flex:0 0 100%;scroll-snap-align:start;background:#20262a}
+.gal .sl iframe,.gal .sl video{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:contain;background:#000}
+.gal .nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:0;background:rgba(27,32,36,.75);color:#fff;font:400 28px/1 Archivo,sans-serif;cursor:pointer;display:grid;place-items:center;padding:0 0 3px}
+.gal .prev{left:10px}.gal .next{right:10px}
+.gal .nav:disabled{opacity:.3;cursor:default}
+.gal .count{position:absolute;top:10px;right:10px;background:rgba(27,32,36,.75);color:#fff;font-size:13px;padding:3px 9px;border-radius:999px}
 .ph0{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:10px;color:#b9c1c6;text-align:center;padding:16px;
  background:repeating-linear-gradient(0deg,transparent 0 31px,#2a3236 31px 32px),repeating-linear-gradient(90deg,transparent 0 31px,#2a3236 31px 32px),#20262a}
 .ph0 svg{width:56px;height:56px}
@@ -317,7 +326,7 @@ const T={
   k_edu:"Studies",k_work:"Work",skills_h:"Skills",lang_h:"Languages",basic:"Basic knowledge",
   proj_h:"Projects",proj_p:"Robots, PLC controls and embedded builds, each with what it achieved.",
   f_all:"All",f_rob:"Robotics",f_auto:"Automation",f_emb:"Embedded",
-  now:"ongoing",zoom:"Open full size",novid:"Video coming soon",code:"View code on GitHub",
+  now:"ongoing",zoom:"Open full size",prev:"Previous",next:"Next",novid:"Video coming soon",code:"View code on GitHub",
   lab_h:"Learning lab",lab_p:"Smaller simulations and practice builds that are not in my CV.",
   lab_note:"These cards are placeholders. Each one gets a title, a short description and a video.",
   c_h:"Let's talk",c_p:"Based in Karlsruhe and open to relocating within Germany. The quickest way to reach me is email.",
@@ -330,7 +339,7 @@ const T={
   k_edu:"Studium",k_work:"Beruf",skills_h:"Kenntnisse",lang_h:"Sprachen",basic:"Grundkenntnisse",
   proj_h:"Projekte",proj_p:"Roboter, SPS-Steuerungen und Embedded-Projekte, jeweils mit dem erreichten Ergebnis.",
   f_all:"Alle",f_rob:"Robotik",f_auto:"Automatisierung",f_emb:"Embedded",
-  now:"laufend",zoom:"In voller Größe öffnen",novid:"Video folgt",code:"Code auf GitHub ansehen",
+  now:"laufend",zoom:"In voller Größe öffnen",prev:"Zurück",next:"Weiter",novid:"Video folgt",code:"Code auf GitHub ansehen",
   lab_h:"Lernlabor",lab_p:"Kleinere Simulationen und Übungsprojekte, die nicht im Lebenslauf stehen.",
   lab_note:"Diese Karten sind Platzhalter. Jede bekommt einen Titel, eine kurze Beschreibung und ein Video.",
   c_h:"Kontakt",c_p:"Wohnhaft in Karlsruhe und offen für einen Umzug innerhalb Deutschlands. Am schnellsten erreichen Sie mich per E-Mail.",
@@ -419,11 +428,26 @@ const L=(v,lang)=>typeof v==="string"?v:(v[lang]??v.en);
 let lang="en",filter="all";
 
 const play='<svg viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="27" fill="none" stroke="currentColor" stroke-width="2"/><path d="M23 18l16 10-16 10z" fill="currentColor"/></svg>';
+/* media: any mix of YouTube ids, video files and images; several become a swipeable gallery */
+const IMG=/\.(jpe?g|png|webp|gif|svg)$/i;
+const split=v=>(v||"").split(/[\n,]+/).map(z=>z.trim()).filter(Boolean);
+function items(x){
+ if(x.media)return x.media;
+ return [...split(x.video).map(src=>({src})),...split(x.yt).map(id=>({yt:id}))];
+}
+function slide(m,x){
+ const name=esc(L(x.t,lang));
+ if(m.yt)return `<iframe src="https://www.youtube-nocookie.com/embed/${esc(m.yt)}" title="${name}" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+ if(IMG.test(m.src))return `<a class="pic" href="${esc(m.src)}" target="_blank" rel="noopener" title="${esc(T[lang].zoom)}"><img src="${esc(m.src)}" alt="${name}" loading="lazy"></a>`;
+ return `<video src="${esc(m.src)}#t=0.5" controls preload="metadata" playsinline></video>`;
+}
 function media(x){
- if(x.yt) return `<div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/${esc(x.yt)}" title="${esc(L(x.t,lang))}" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`;
- if(x.video&&/\.(jpe?g|png|webp|gif|svg)$/i.test(x.video)) return `<div class="vid pic"><a href="${esc(x.video)}" target="_blank" rel="noopener" title="${esc(T[lang].zoom)}"><img src="${esc(x.video)}" alt="${esc(L(x.t,lang))}" loading="lazy"></a></div>`;
- if(x.video) return `<div class="vid"><video src="${esc(x.video)}#t=0.5" controls preload="metadata" playsinline></video></div>`;
- return `<div class="vid"><div class="ph0">${play}<span>${esc(T[lang].novid)}</span></div></div>`;
+ const ms=items(x);
+ if(!ms.length)return `<div class="vid"><div class="ph0">${play}<span>${esc(T[lang].novid)}</span></div></div>`;
+ if(ms.length===1)return `<div class="vid${ms[0].src&&IMG.test(ms[0].src)?" white":""}">${slide(ms[0],x)}</div>`;
+ return `<div class="vid gal"><div class="track" tabindex="0" aria-label="${esc(L(x.t,lang))}">${ms.map(m=>`<div class="sl${m.src&&IMG.test(m.src)?" white":""}">${slide(m,x)}</div>`).join("")}</div>
+  <button type="button" class="nav prev" aria-label="${esc(T[lang].prev)}">‹</button><button type="button" class="nav next" aria-label="${esc(T[lang].next)}">›</button>
+  <span class="count">1 / ${ms.length}</span></div>`;
 }
 
 function render(){
@@ -452,11 +476,19 @@ function render(){
   </div></article>`}).join("");
 
  document.getElementById("labGrid").innerHTML=LAB.map(x=>`<article class="lc">${media(x)}<div class="pb"><h3>${esc(L(x.t,lang))}</h3><p>${esc(L(x.p,lang))}</p><div class="tags">${x.tags.map(g=>`<span class="chip">${esc(g)}</span>`).join("")}</div></div></article>`).join("");
+ document.querySelectorAll(".gal .prev").forEach(b=>b.disabled=true);
  document.getElementById("labNote").hidden=!LAB.some(x=>x.sample);
  document.getElementById("lab").hidden=!LAB.length;
  document.querySelector('.links a[href="#lab"]').hidden=!LAB.length;
 }
 
+function gal(g,dir){const t=g.querySelector(".track");t.scrollBy({left:dir*t.clientWidth,behavior:"smooth"})}
+document.addEventListener("click",e=>{const b=e.target.closest(".gal .nav");if(b)gal(b.closest(".gal"),b.classList.contains("next")?1:-1)});
+document.addEventListener("keydown",e=>{const t=e.target.closest&&e.target.closest(".gal .track");if(!t)return;if(e.key==="ArrowRight"){e.preventDefault();gal(t.parentElement,1)}if(e.key==="ArrowLeft"){e.preventDefault();gal(t.parentElement,-1)}});
+document.addEventListener("scroll",e=>{const t=e.target;if(!(t.classList&&t.classList.contains("track")))return;
+ const g=t.parentElement,n=t.children.length,i=Math.round(t.scrollLeft/Math.max(1,t.clientWidth));
+ g.querySelector(".count").textContent=`${i+1} / ${n}`;g.querySelector(".prev").disabled=i===0;g.querySelector(".next").disabled=i===n-1;
+ [...t.querySelectorAll("video")].forEach((v,k)=>{if(v.closest(".sl")!==t.children[i])v.pause()})},true);
 document.querySelector(".lang").addEventListener("click",e=>{
  const b=e.target.closest("[data-lang]");if(!b)return;
  lang=b.dataset.lang;try{localStorage.setItem("lang",lang)}catch(_){ }render();
@@ -491,16 +523,17 @@ function md(v){ /* accept 09.2026, 9.2026, 01.09.2026 or 2026-09-01 */
  return v;
 }
 const ytid=v=>{const m=(v||"").match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);return m?m[1]:(/^[\w-]{11}$/.test(v||"")?v:"")};
+const mediaOf=o=>[...split(o.media_files||o.video_file).map(src=>({src})),...split(o.youtube_link).map(ytid).filter(Boolean).map(id=>({yt:id}))];
 const CAT={robotics:"rob",automation:"auto",embedded:"emb",robotik:"rob",automatisierung:"auto"};
 async function loadSheet(){
  const [pr,lb,tl,sk,lg]=await Promise.all(["Projects","Lab","Timeline","Skills","Languages"].map(n=>tab(n).catch(()=>null)));
  if(pr)P=pr.filter(on).map(o=>{const st=md(o.start),en=md(o.end);return{
   cat:list(o.category.toLowerCase()).map(c=>CAT[c]||c),d:en?(en===st?st:`${st} – ${en}`):`${st} –`,now:!en,
-  yt:ytid(o.youtube_link),video:o.video_file,gh:o.github_link,
+  media:mediaOf(o),gh:o.github_link,
   t:{en:o.title_en,de:o.title_de||o.title_en},s:{en:o.subtitle_en,de:o.subtitle_de||o.subtitle_en},
   m:{v:o.result_value_en,vde:o.result_value_de||o.result_value_en,l:{en:o.result_label_en,de:o.result_label_de||o.result_label_en}},
   b:{en:lines(o.bullets_en),de:lines(o.bullets_de||o.bullets_en)},tags:list(o.tags)}});
- if(lb)LAB=lb.filter(on).map(o=>({yt:ytid(o.youtube_link),video:o.video_file,t:{en:o.title_en,de:o.title_de||o.title_en},p:{en:o.description_en,de:o.description_de||o.description_en},tags:list(o.tags)}));
+ if(lb)LAB=lb.filter(on).map(o=>({media:mediaOf(o),t:{en:o.title_en,de:o.title_de||o.title_en},p:{en:o.description_en,de:o.description_de||o.description_en},tags:list(o.tags)}));
  if(tl)TL=tl.filter(on).map(o=>{const st=md(o.start),en=md(o.end);return{k:(o.type||"").toLowerCase().startsWith("work")?"work":"edu",d:en?`${st} – ${en}`:`${st} –`,t:{en:o.title_en,de:o.title_de||o.title_en},s:{en:o.details_en,de:o.details_de||o.details_en}}});
  if(sk)SK=sk.filter(on).map(o=>{const a=list(o.items_en),b=list(o.items_de);return{basic:(o.basic||"").toLowerCase()==="yes",l:{en:o.group_en,de:o.group_de||o.group_en},v:a.map((x,i)=>({en:x,de:b[i]||x}))}});
  if(lg)LANGS=lg.filter(on).map(o=>({n:{en:o.language_en,de:o.language_de||o.language_en},v:{en:o.level_en,de:o.level_de||o.level_en}}));
