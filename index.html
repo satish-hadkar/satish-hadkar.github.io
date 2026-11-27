@@ -420,7 +420,7 @@ let lang="en",filter="all";
 const play='<svg viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="27" fill="none" stroke="currentColor" stroke-width="2"/><path d="M23 18l16 10-16 10z" fill="currentColor"/></svg>';
 function media(x){
  if(x.yt) return `<div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/${esc(x.yt)}" title="${esc(L(x.t,lang))}" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`;
- if(x.video) return `<div class="vid"><video src="${esc(x.video)}" controls preload="metadata" playsinline></video></div>`;
+ if(x.video) return `<div class="vid"><video src="${esc(x.video)}#t=0.5" controls preload="metadata" playsinline></video></div>`;
  return `<div class="vid"><div class="ph0">${play}<span>${esc(T[lang].novid)}</span></div></div>`;
 }
 
@@ -493,7 +493,7 @@ const CAT={robotics:"rob",automation:"auto",embedded:"emb",robotik:"rob",automat
 async function loadSheet(){
  const [pr,lb,tl,sk,lg]=await Promise.all(["Projects","Lab","Timeline","Skills","Languages"].map(n=>tab(n).catch(()=>null)));
  if(pr)P=pr.filter(on).map(o=>{const st=md(o.start),en=md(o.end);return{
-  cat:list(o.category.toLowerCase()).map(c=>CAT[c]||c),d:en?`${st} – ${en}`:`${st} –`,now:!en,
+  cat:list(o.category.toLowerCase()).map(c=>CAT[c]||c),d:en?(en===st?st:`${st} – ${en}`):`${st} –`,now:!en,
   yt:ytid(o.youtube_link),video:o.video_file,gh:o.github_link,
   t:{en:o.title_en,de:o.title_de||o.title_en},s:{en:o.subtitle_en,de:o.subtitle_de||o.subtitle_en},
   m:{v:o.result_value_en,vde:o.result_value_de||o.result_value_en,l:{en:o.result_label_en,de:o.result_label_de||o.result_label_en}},
