@@ -105,6 +105,7 @@ nav .wrap{display:flex;align-items:center;gap:20px;height:64px}
 .vid{position:relative;aspect-ratio:16/9;background:#20262a}
 .proj .vid{aspect-ratio:auto;min-height:320px}
 .vid iframe,.vid video{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:cover}
+.vid.pic{background:#fff}.vid.pic a{position:absolute;inset:0;cursor:zoom-in}.vid.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:10px}
 .ph0{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:10px;color:#b9c1c6;text-align:center;padding:16px;
  background:repeating-linear-gradient(0deg,transparent 0 31px,#2a3236 31px 32px),repeating-linear-gradient(90deg,transparent 0 31px,#2a3236 31px 32px),#20262a}
 .ph0 svg{width:56px;height:56px}
@@ -316,7 +317,7 @@ const T={
   k_edu:"Studies",k_work:"Work",skills_h:"Skills",lang_h:"Languages",basic:"Basic knowledge",
   proj_h:"Projects",proj_p:"Robots, PLC controls and embedded builds, each with what it achieved.",
   f_all:"All",f_rob:"Robotics",f_auto:"Automation",f_emb:"Embedded",
-  now:"ongoing",novid:"Video coming soon",code:"View code on GitHub",
+  now:"ongoing",zoom:"Open full size",novid:"Video coming soon",code:"View code on GitHub",
   lab_h:"Learning lab",lab_p:"Smaller simulations and practice builds that are not in my CV.",
   lab_note:"These cards are placeholders. Each one gets a title, a short description and a video.",
   c_h:"Let's talk",c_p:"Based in Karlsruhe and open to relocating within Germany. The quickest way to reach me is email.",
@@ -329,7 +330,7 @@ const T={
   k_edu:"Studium",k_work:"Beruf",skills_h:"Kenntnisse",lang_h:"Sprachen",basic:"Grundkenntnisse",
   proj_h:"Projekte",proj_p:"Roboter, SPS-Steuerungen und Embedded-Projekte, jeweils mit dem erreichten Ergebnis.",
   f_all:"Alle",f_rob:"Robotik",f_auto:"Automatisierung",f_emb:"Embedded",
-  now:"laufend",novid:"Video folgt",code:"Code auf GitHub ansehen",
+  now:"laufend",zoom:"In voller Größe öffnen",novid:"Video folgt",code:"Code auf GitHub ansehen",
   lab_h:"Lernlabor",lab_p:"Kleinere Simulationen und Übungsprojekte, die nicht im Lebenslauf stehen.",
   lab_note:"Diese Karten sind Platzhalter. Jede bekommt einen Titel, eine kurze Beschreibung und ein Video.",
   c_h:"Kontakt",c_p:"Wohnhaft in Karlsruhe und offen für einen Umzug innerhalb Deutschlands. Am schnellsten erreichen Sie mich per E-Mail.",
@@ -420,6 +421,7 @@ let lang="en",filter="all";
 const play='<svg viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="27" fill="none" stroke="currentColor" stroke-width="2"/><path d="M23 18l16 10-16 10z" fill="currentColor"/></svg>';
 function media(x){
  if(x.yt) return `<div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/${esc(x.yt)}" title="${esc(L(x.t,lang))}" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`;
+ if(x.video&&/\.(jpe?g|png|webp|gif|svg)$/i.test(x.video)) return `<div class="vid pic"><a href="${esc(x.video)}" target="_blank" rel="noopener" title="${esc(T[lang].zoom)}"><img src="${esc(x.video)}" alt="${esc(L(x.t,lang))}" loading="lazy"></a></div>`;
  if(x.video) return `<div class="vid"><video src="${esc(x.video)}#t=0.5" controls preload="metadata" playsinline></video></div>`;
  return `<div class="vid"><div class="ph0">${play}<span>${esc(T[lang].novid)}</span></div></div>`;
 }
